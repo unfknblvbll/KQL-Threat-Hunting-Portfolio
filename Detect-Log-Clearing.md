@@ -15,8 +15,17 @@ SecurityEvent
 | project TimeGenerated, Computer, Account, Activity`
 
 
-### Why This Matters (SOC Context)
+## Why This Matters (SOC Context)
 Attackers frequently use the command ```wevtutil.exe cl``` or PowerShell commands to wipe event logs immediately after compromising a system _(MITRE ATT&CK T1070.001 - Indicator Removal on Host: Clear Windows Event Logs)._ Detecting Event ID 1102 allows a SOC analyst to catch this defense evasion tactic in real-time.
+
+## Query Breakdown
+* `SecurityEvent`: Targets the primary table containing Windows security logs.
+
+* `where TimeGenerated > ago(7d)`: Establishes a 7-day lookback period. Filtering by time early in the query is essential for performance, as it tells the engine to ignore older, irrelevant data.
+
+* `where EventID == 1102`: The specific filter to isolate "Audit log was cleared" events.
+
+* `project TimeGenerated, Computer, Account, Activity`: This operator is used for data cleanliness. Instead of returning the full, cluttered event log object, I explicitly define only the fields that an analyst needs to initiate an investigation.
 
 ## Analyst Investigation Steps
 If this query fires an alert in production, a SOC Analyst should:
@@ -25,7 +34,7 @@ If this query fires an alert in production, a SOC Analyst should:
 
 * Review logs prior to the clearing event to identify the malicious activity that triggered the need for log erasure.
 
-* Treat unexplained log-clearing by _non-administrative_ or _unusual service accounts_ as a critical `true-positive` incident and isolate the host machine from the network.
+* Treat unexplained log-clearing by _non-administrative_ or _unusual service accounts_ as a critical true-positive incident and isolate the host machine from the network.
 
 
 ## 🧠 Hindsights
