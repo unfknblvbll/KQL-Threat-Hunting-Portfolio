@@ -22,6 +22,8 @@ These are the detection rules and hunts I’ve developed so far. Each project is
 
 * [**Detect Windows Event Log Clearing**](./Detect-Log-Clearing.md)
   * *Focus:* Defense Evasion (T1070.001) | Investigating malicious activity pre-log erasure.
+* [**Detect Brute Force Attacks**](./Detect-Brute-Force.md)
+  * *Focus:* Credential Access (T1110) | Analyzing login failure spikes.
 
 ## Current Focus
 I am currently deep-diving into KQL performance optimization and refining my incident response procedures for common TTPs. 
